@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="warm">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The day you insist</title>
+<style>
+  :root, [data-theme="warm"] {
+    --bg1: #fff4ea;
+    --bg2: #ffe7d1;
+    --card: #ffffff;
+    --card-alt: #faf0e7;
+    --text: #4b2e1a;
+    --text-soft: #a07860;
+    --border: #f0dcc8;
+    --primary: #f97316;
+    --primary-strong: #ea580c;
+    --primary-soft: #ffedd5;
+    --chip-selected: #fff7ed;
+    --done: #10b981;
+    --done-soft: #ecfdf5;
+    --done-emoji-bg: #d1fae5;
+    --bar-track: #f4e6d8;
+    --muted-line: #e8d5c2;
+    --shadow: rgba(249, 115, 22, 0.14);
+    --shadow-strong: rgba(249, 115, 22, 0.22);
+    --overlay: rgba(64, 32, 12, 0.45);
+    --danger-soft: #fff1f2;
+  }
+
+  [data-theme="dark"] {
+    --bg1: #12141f;
+    --bg2: #1b1526;
+    --card: #1e2133;
+    --card-alt: #262a40;
+    --text: #f1f3f7;
+    --text-soft: #9298b0;
+    --border: #2c3047;
+    --primary: #fb923c;
+    --primary-strong: #f97316;
+    --primary-soft: #3b2a1a;
+    --chip-selected: #45301c;
+    --done: #34d399;
+    --done-soft: #0f2f26;
+    --done-emoji-bg: #12332a;
+    --bar-track: #2c3047;
+    --muted-line: #3a3f5c;
+    --shadow: rgba(0, 0, 0, 0.35);
+    --shadow-strong: rgba(0, 0, 0, 0.55);
+    --overlay: rgba(0, 0, 0, 0.6);
+    --danger-soft: #3a2026;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  body {
+    background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 100%);
+    background-attachment: fixed;
+    transition: background 0.35s ease;
+  }
+
+  .app {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px 110px;
+  }
+
+  /* ---------- 顶栏 ---------- */
+  .topbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    line-height: 1.25;
+  }
+  .date { color: var(--text-soft); font-size: 14px; margin-top: 6px; transition: color 0.3s; }
+
+  .icon-btn {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--shadow);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--shadow-strong); }
+
+  /* ---------- 进度卡 ---------- */
+  .progress-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 22px 24px;
+    box-shadow: 0 8px 30px var(--shadow);
+    margin-bottom: 24px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .progress-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .progress-label { font-size: 15px; color: var(--text-soft); transition: color 0.3s; }
+  .progress-count { font-size: 28px; font-weight: 800; color: var(--primary); }
+  .progress-count small { font-size: 16px; font-weight: 600; color: var(--text-soft); }
+  .progress-celebration { font-size: 15px; color: var(--done); font-weight: 700; }
+
+  .bar { height: 10px; background: var(--bar-track); border-radius: 99px; overflow: hidden; transition: background 0.3s; }
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-strong));
+    transition: width 0.5s ease;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 28px 0 12px;
+  }
+
+  /* ---------- 习惯列表 ---------- */
+  .habit-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .habit {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 16px var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.3s ease;
+    animation: pop-in 0.25s ease;
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+  }
+  .habit:hover { transform: translateY(-1px); box-shadow: 0 8px 22px var(--shadow-strong); }
+
+  .habit.done { background: linear-gradient(135deg, var(--done-soft), var(--card)); }
+
+  .emoji {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--primary-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .habit.done .emoji { background: var(--done-emoji-bg); }
+
+  .habit-info { flex: 1; min-width: 0; }
+  .habit-name { font-size: 16px; font-weight: 600; transition: color 0.2s; }
+  .habit.done .habit-name { color: var(--text-soft); text-decoration: line-through; }
+  .habit-streak { font-size: 12px; color: var(--text-soft); margin-top: 3px; }
+
+  .check {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2.5px solid var(--muted-line);
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
+    background: transparent;
+    padding: 0;
+  }
+  .check:hover { border-color: var(--primary); transform: scale(1.08); }
+  .habit.done .check {
+    background: var(--done);
+    border-color: var(--done);
+    animation: check-pop 0.3s ease;
+  }
+  @keyframes check-pop {
+    0% { transform: scale(0.7); }
+    60% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .check svg { width: 16px; height: 16px; opacity: 0; transform: scale(0.5); transition: all 0.2s ease; }
+  .habit.done .check svg { opacity: 1; transform: scale(1); }
+
+  .delete {
+    border: none; background: transparent;
+    color: var(--muted-line); font-size: 20px; line-height: 1;
+    cursor: pointer; padding: 6px; border-radius: 8px;
+    opacity: 0; transition: all 0.2s ease; flex-shrink: 0;
+  }
+  .habit:hover .delete, .habit:focus-within .delete { opacity: 1; color: var(--text-soft); }
+  .delete:hover { color: var(--danger); background: var(--danger-soft); }
+  @media (hover: none) { .delete { opacity: 0.45; } }
+
+  .empty {
+    background: var(--card);
+    border: 2px dashed var(--muted-line);
+    border-radius: 16px;
+    padding: 36px 20px;
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 15px;
+  }
+  .empty .big { font-size: 42px; margin-bottom: 10px; }
+
+  footer {
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 12px;
+    margin-top: 32px;
+    opacity: 0.8;
+  }
+
+  /* ---------- 悬浮添加按钮 ---------- */
+  .fab {
+    position: fixed;
+    right: 22px;
+    bottom: 26px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 10px 26px var(--shadow-strong);
+    transition: transform 0.15s ease, background 0.2s ease;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fab:hover { transform: scale(1.08); background: var(--primary-strong); }
+  .fab:active { transform: scale(0.94); }
+
+  /* ---------- 添加弹窗 ---------- */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 20px;
+    animation: fade-in 0.2s ease;
+  }
+  .modal-backdrop[hidden] { display: none; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 20px 60px var(--shadow-strong);
+    animation: modal-in 0.25s ease;
+  }
+  @keyframes modal-in {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+  }
+  .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 14px; }
+
+  .emoji-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .emoji-option {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: var(--card-alt);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s ease;
+    padding: 0;
+  }
+  .emoji-option:hover { transform: scale(1.1); }
+  .emoji-option.selected { border-color: var(--primary); background: var(--chip-selected); }
+
+  .modal input {
+    width: 100%;
+    border: 2px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    margin-bottom: 16px;
+  }
+  .modal input:focus { border-color: var(--primary); }
+  .modal input::placeholder { color: var(--text-soft); opacity: 0.8; }
+
+  .modal-actions { display: flex; gap: 10px; }
+  .modal-actions button {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn-cancel { background: var(--card-alt); color: var(--text-soft); }
+  .btn-cancel:hover { color: var(--text); }
+  .btn-add { background: var(--primary); color: #fff; }
+  .btn-add:hover { background: var(--primary-strong); transform: translateY(-1px); }
+  .btn-add:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>The day you insist</h1>
+        <div class="date" id="dateText"></div>
+      </div>
+      <button class="icon-btn" id="themeToggle" title="切换主题" aria-label="切换主题">
+        <span id="themeIcon">🌙</span>
+      </button>
+    </header>
+
+    <div class="progress-card">
+      <div class="progress-top">
+        <span class="progress-label">今日完成</span>
+        <span class="progress-count" id="progressCount">0 / 0 <small>项</small></span>
+      </div>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+      <div style="margin-top:10px; min-height:20px;">
+        <span class="progress-celebration" id="celebration"></span>
+      </div>
+    </div>
+
+    <div class="section-title">今日习惯</div>
+    <div class="habit-list" id="habitList"></div>
+
+    <footer>数据保存在本浏览器中 · 每天自动重新开始</footer>
+  </div>
+
+  <button class="fab" id="addFab" title="添加习惯" aria-label="添加习惯">＋</button>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-title" id="modalTitle">添加新习惯</div>
+      <div class="emoji-row" id="emojiRow"></div>
+      <input id="habitName" type="text" placeholder="习惯名称，如：喝水" maxlength="12" autocomplete="off">
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="cancelBtn">取消</button>
+        <button type="button" class="btn-add" id="addBtn">添加</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "habit-tracker-v1";
+  var THEME_KEY = "habit-tracker-theme";
+  var EMOJIS = ["💧", "🏃", "📚", "🥗", "😴", "🌅", "🧘", "✍️", "🎸", "🧹", "💊", "🎮"];
+
+  /* ---------- 数据 ---------- */
+  var state = load();
+
+  function load() {
+    var data = { habits: [], completions: {} };
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.habits)) {
+          data.habits = parsed.habits;
+          data.completions = parsed.completions || {};
+        }
+      }
+    } catch (e) { /* localStorage 不可用时退回内存模式 */ }
+    return data;
+  }
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+  }
+
+  function todayKey() {
+    var d = new Date();
+    return dateKey(d);
+  }
+
+  function dateKey(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  }
+
+  function isCompleted(habitId, key) {
+    var list = state.completions[key] || [];
+    return list.indexOf(habitId) !== -1;
+  }
+
+  function getStreak(habitId) {
+    var streak = 0;
+    var d = new Date();
+    if (!isCompleted(habitId, todayKey())) {
+      d.setDate(d.getDate() - 1);
+    }
+    while (isCompleted(habitId, dateKey(d))) {
+      streak++;
+      d.setDate(d.getDate() - 1);
+    }
+    return streak;
+  }
+
+  /* ---------- DOM ---------- */
+  var dateText = document.getElementById("dateText");
+  var progressCount = document.getElementById("progressCount");
+  var barFill = document.getElementById("barFill");
+  var celebration = document.getElementById("celebration");
+  var habitList = document.getElementById("habitList");
+  var emojiRow = document.getElementById("emojiRow");
+  var habitNameInput = document.getElementById("habitName");
+  var addBtn = document.getElementById("addBtn");
+  var cancelBtn = document.getElementById("cancelBtn");
+  var addFab = document.getElementById("addFab");
+  var modalBackdrop = document.getElementById("modalBackdrop");
+  var themeToggle = document.getElementById("themeToggle");
+  var themeIcon = document.getElementById("themeIcon");
+
+  /* ---------- 主题 ---------- */
+  function applyTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    themeIcon.textContent = t === "dark" ? "☀️" : "🌙";
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) { /* ignore */ }
+  }
+  themeToggle.addEventListener("click", function () {
+    var cur = document.documentElement.getAttribute("data-theme");
+    applyTheme(cur === "dark" ? "warm" : "dark");
+  });
+  applyTheme((function () {
+    try { return localStorage.getItem(THEME_KEY) || "warm"; } catch (e) { return "warm"; }
+  })());
+
+  /* ---------- 表情选择 ---------- */
+  var selectedEmoji = EMOJIS[0];
+  EMOJIS.forEach(function (e) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "emoji-option" + (e === selectedEmoji ? " selected" : "");
+    btn.textContent = e;
+    btn.addEventListener("click", function () {
+      selectedEmoji = e;
+      emojiRow.querySelectorAll(".emoji-option").forEach(function (b) {
+        b.classList.toggle("selected", b === btn);
+      });
+    });
+    emojiRow.appendChild(btn);
+  });
+
+  /* ---------- 弹窗 ---------- */
+  function openModal() {
+    modalBackdrop.hidden = false;
+    habitNameInput.focus();
+  }
+  function closeModal() {
+    modalBackdrop.hidden = true;
+  }
+  addFab.addEventListener("click", openModal);
+  cancelBtn.addEventListener("click", closeModal);
+  modalBackdrop.addEventListener("click", function (e) {
+    if (e.target === modalBackdrop) closeModal();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !modalBackdrop.hidden) closeModal();
+  });
+
+  /* ---------- 渲染 ---------- */
+  function fmtDate() {
+    var d = new Date();
+    var week = ["日", "一", "二", "三", "四", "五", "六"][d.getDay()];
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日 · 星期" + week;
+  }
+
+  function render() {
+    dateText.textContent = fmtDate();
+    var key = todayKey();
+    var total = state.habits.length;
+    var doneCount = state.habits.filter(function (h) {
+      return isCompleted(h.id, key);
+    }).length;
+
+    progressCount.innerHTML = doneCount + " / " + total + " <small>项</small>";
+    var pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+    barFill.style.width = pct + "%";
+
+    if (total > 0 && doneCount === total) {
+      celebration.textContent = "🎉 全部完成，太棒了！";
+    } else if (total > 0 && doneCount > 0) {
+      celebration.textContent = "继续加油 💪";
+    } else {
+      celebration.textContent = "";
+    }
+
+    habitList.innerHTML = "";
+    if (total === 0) {
+      var empty = document.createElement("div");
+      empty.className = "empty";
+      empty.innerHTML = '<div class="big">🌱</div>还没有自己的习惯<br>点右下角「＋」开始添加';
+      habitList.appendChild(empty);
+      return;
+    }
+
+    state.habits.forEach(function (h) {
+      var done = isCompleted(h.id, key);
+      var card = document.createElement("div");
+      card.className = "habit" + (done ? " done" : "");
+
+      var emoji = document.createElement("div");
+      emoji.className = "emoji";
+      emoji.textContent = h.emoji || "✨";
+
+      var info = document.createElement("div");
+      info.className = "habit-info";
+      var name = document.createElement("div");
+      name.className = "habit-name";
+      name.textContent = h.name;
+      var streak = document.createElement("div");
+      streak.className = "habit-streak";
+      var s = getStreak(h.id);
+      streak.textContent = s > 0 ? "🔥 连续 " + s + " 天" : "今天开始第 1 天";
+
+      var check = document.createElement("button");
+      check.type = "button";
+      check.className = "check";
+      check.title = done ? "取消打卡" : "打卡";
+      check.setAttribute("aria-label", (done ? "取消" : "") + "完成 " + h.name);
+      check.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"></polyline></svg>';
+      check.addEventListener("click", function () {
+        toggleHabit(h.id);
+      });
+
+      var del = document.createElement("button");
+      del.type = "button";
+      del.className = "delete";
+      del.title = "删除该习惯";
+      del.setAttribute("aria-label", "删除 " + h.name);
+      del.textContent = "×";
+      del.addEventListener("click", function () {
+        deleteHabit(h.id);
+      });
+
+      info.appendChild(name);
+      info.appendChild(streak);
+      card.appendChild(emoji);
+      card.appendChild(info);
+      card.appendChild(check);
+      card.appendChild(del);
+      habitList.appendChild(card);
+    });
+  }
+
+  /* ---------- 操作 ---------- */
+  function toggleHabit(id) {
+    var key = todayKey();
+    var list = state.completions[key] || [];
+    var idx = list.indexOf(id);
+    if (idx === -1) {
+      list.push(id);
+    } else {
+      list.splice(idx, 1);
+    }
+    state.completions[key] = list;
+    save();
+    render();
+  }
+
+  function deleteHabit(id) {
+    state.habits = state.habits.filter(function (h) { return h.id !== id; });
+    save();
+    render();
+  }
+
+  function addHabit() {
+    var name = habitNameInput.value.trim();
+    if (!name) {
+      habitNameInput.focus();
+      return;
+    }
+    state.habits.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      name: name,
+      emoji: selectedEmoji,
+      createdAt: Date.now()
+    });
+    habitNameInput.value = "";
+    save();
+    closeModal();
+    render();
+  }
+
+  addBtn.addEventListener("click", addHabit);
+  habitNameInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") addHabit();
+  });
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
