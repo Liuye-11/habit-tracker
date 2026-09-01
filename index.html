@@ -6,12 +6,9 @@
 <title>The day you insist</title>
 <style>
   :root {
-    --font-display: "Didot", "Iowan Old Style", "Baskerville", "Songti SC", "STSong", "SimSun", Georgia, serif;
-    --font-body: "Iowan Old Style", "Palatino", "Baskerville", "Songti SC", "STSong", "SimSun", Georgia, "PingFang SC", "Microsoft YaHei", serif;
-    --font-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
-    --primary: #2563eb;
-    --primary-strong: #1d4ed8;
-    --primary-soft: rgba(37, 99, 235, 0.12);
+    --primary: #4a6fa5;
+    --primary-strong: #3d5f8f;
+    --primary-soft: rgba(74, 111, 165, 0.14);
     --done: #10b981;
     --done-soft: rgba(16, 185, 129, 0.14);
     --done-emoji-bg: rgba(16, 185, 129, 0.18);
@@ -26,9 +23,9 @@
   body.weather-snow    { --text: #263a54; --text-soft: #5b7290; --card: rgba(255,255,255,0.82); --card-solid: #ffffff; --shadow: rgba(50,80,120,0.14); --shadow-strong: rgba(50,80,120,0.22); --muted-line: rgba(130,155,185,0.5); }
   body.weather-fog     { --text: #27313d; --text-soft: #5d6b7d; --card: rgba(255,255,255,0.80); --card-solid: #ffffff; --shadow: rgba(40,55,75,0.14); --shadow-strong: rgba(40,55,75,0.22); --muted-line: rgba(110,125,145,0.45); }
 
-  body.weather-rain    { --text: #eef4fb; --text-soft: #b8cbe0; --card: rgba(13,27,48,0.62); --card-solid: #0e1e38; --shadow: rgba(0,0,0,0.30); --shadow-strong: rgba(0,0,0,0.45); --muted-line: rgba(160,185,215,0.4); }
+  body.weather-rain    { --text: #263140; --text-soft: #5c6e81; --card: rgba(255,255,255,0.80); --card-solid: #ffffff; --shadow: rgba(50,70,90,0.16); --shadow-strong: rgba(50,70,90,0.24); --muted-line: rgba(110,130,150,0.45); }
   body.weather-thunder { --text: #f1f5fb; --text-soft: #aab8d0; --card: rgba(12,16,32,0.66); --card-solid: #11162b; --shadow: rgba(0,0,0,0.35); --shadow-strong: rgba(0,0,0,0.5); --muted-line: rgba(150,170,205,0.4); }
-  body.weather-night   { --text: #eaf1fb; --text-soft: #9fb3d0; --card: rgba(10,20,45,0.66); --card-solid: #0d1830; --shadow: rgba(0,0,0,0.35); --shadow-strong: rgba(0,0,0,0.5); --muted-line: rgba(150,175,215,0.4); }
+  body.weather-night   { --text: #e8edf6; --text-soft: #8f9db5; --card: rgba(9,12,20,0.72); --card-solid: #0b0f1a; --shadow: rgba(0,0,0,0.45); --shadow-strong: rgba(0,0,0,0.6); --muted-line: rgba(140,155,185,0.35); }
 
   body {
     min-height: 100vh;
@@ -36,15 +33,16 @@
     background-attachment: fixed;
     transition: background 1.2s ease, color 0.6s ease;
     -webkit-font-smoothing: antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
   }
-  body.weather-sunny   { background: linear-gradient(180deg, #2f8ff0 0%, #6fc0f5 52%, #cde9ff 100%); }
-  body.weather-partly  { background: linear-gradient(180deg, #5f9fd8 0%, #9cc6ec 55%, #e4f0fa 100%); }
-  body.weather-overcast{ background: linear-gradient(180deg, #7d8ba0 0%, #a9b6c6 55%, #dde3ea 100%); }
-  body.weather-rain    { background: linear-gradient(180deg, #44618a 0%, #6d88ab 55%, #9db4cc 100%); }
-  body.weather-snow    { background: linear-gradient(180deg, #a9c2dd 0%, #d5e3f0 60%, #f6fafd 100%); }
-  body.weather-thunder { background: linear-gradient(180deg, #232c47 0%, #3b4a6d 55%, #64779c 100%); }
-  body.weather-fog     { background: linear-gradient(180deg, #9aa7b5 0%, #c3cdd8 55%, #eef1f5 100%); }
-  body.weather-night   { background: linear-gradient(180deg, #070f24 0%, #13264a 60%, #27486f 100%); }
+  body.weather-sunny   { background: linear-gradient(180deg, #8fb8d8 0%, #b7d3e2 52%, #e2edf2 100%); }
+  body.weather-partly  { background: linear-gradient(180deg, #93adc2 0%, #bfd0da 55%, #e7eef2 100%); }
+  body.weather-overcast{ background: linear-gradient(180deg, #97a5b1 0%, #c2ccd3 55%, #e4e9ec 100%); }
+  body.weather-rain    { background: linear-gradient(180deg, #8398ab 0%, #aebfc9 55%, #d7e0e5 100%); }
+  body.weather-snow    { background: linear-gradient(180deg, #c3cfd9 0%, #e0e8ee 60%, #f5f8fa 100%); }
+  body.weather-thunder { background: linear-gradient(180deg, #394252 0%, #5b6474 55%, #838c9a 100%); }
+  body.weather-fog     { background: linear-gradient(180deg, #a9b3bb 0%, #ccd3d9 55%, #eef1f3 100%); }
+  body.weather-night   { background: linear-gradient(180deg, #04060c 0%, #0a0f1b 60%, #131b2a 100%); }
 
   .sky-glow {
     position: fixed;
@@ -58,11 +56,11 @@
     opacity: 0.85;
     transition: background 1.2s ease;
   }
-  body.weather-sunny .sky-glow    { background: radial-gradient(circle, rgba(255,214,102,0.85) 0%, rgba(255,214,102,0) 65%); }
-  body.weather-partly .sky-glow   { background: radial-gradient(circle, rgba(255,225,140,0.55) 0%, rgba(255,225,140,0) 65%); }
-  body.weather-night .sky-glow    { background: radial-gradient(circle, rgba(235,240,255,0.55) 0%, rgba(235,240,255,0) 65%); }
-  body.weather-thunder .sky-glow  { background: radial-gradient(circle, rgba(180,200,255,0.25) 0%, rgba(180,200,255,0) 65%); }
-  body.weather-snow .sky-glow     { background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 65%); }
+  body.weather-sunny .sky-glow    { background: radial-gradient(circle, rgba(255,238,196,0.45) 0%, rgba(255,238,196,0) 65%); }
+  body.weather-partly .sky-glow   { background: radial-gradient(circle, rgba(255,242,214,0.32) 0%, rgba(255,242,214,0) 65%); }
+  body.weather-night .sky-glow    { background: radial-gradient(circle, rgba(215,225,245,0.22) 0%, rgba(215,225,245,0) 65%); }
+  body.weather-thunder .sky-glow  { background: radial-gradient(circle, rgba(185,200,230,0.16) 0%, rgba(185,200,230,0) 65%); }
+  body.weather-snow .sky-glow     { background: radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 65%); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -71,12 +69,12 @@
     z-index: 1;
     max-width: 600px;
     margin: 0 auto;
-    padding: 40px 20px 110px;
-    font-family: var(--font-body);
+    padding: 40px 20px 150px;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
   }
 
   .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 26px; }
-  h1 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 27px; letter-spacing: 0.03em; line-height: 1.2; }
+  h1 { font-weight: 800; font-size: 28px; letter-spacing: 0.5px; line-height: 1.25; }
   .date { color: var(--text-soft); font-size: 14px; margin-top: 8px; letter-spacing: 0.04em; transition: color 0.5s; }
 
   .weather-chip-wrap { position: relative; flex-shrink: 0; }
@@ -90,7 +88,7 @@
     border-radius: 999px;
     padding: 8px 14px;
     font-size: 13px;
-    font-family: var(--font-ui);
+    
     cursor: pointer;
     box-shadow: 0 4px 14px var(--shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -107,7 +105,7 @@
   .weather-menu button {
     width: 100%; display: flex; align-items: center; gap: 10px;
     border: none; background: transparent; color: var(--text);
-    font-family: var(--font-ui); font-size: 14px;
+     font-size: 14px;
     padding: 9px 12px; border-radius: 10px; cursor: pointer; text-align: left;
   }
   .weather-menu button:hover { background: var(--primary-soft); }
@@ -126,14 +124,14 @@
   }
   .progress-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
   .progress-label { font-size: 15px; color: var(--text-soft); letter-spacing: 0.06em; }
-  .progress-count { font-size: 30px; font-weight: 700; font-family: var(--font-display); color: var(--text); }
+  .progress-count { font-size: 28px; font-weight: 800; color: var(--text); }
   .progress-count small { font-size: 15px; font-weight: 400; color: var(--text-soft); }
   .progress-celebration { font-size: 15px; color: var(--done); font-weight: 600; min-height: 20px; margin-top: 10px; }
 
   .bar { height: 8px; background: var(--bar-track); border-radius: 99px; overflow: hidden; }
   .bar-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), #60a5fa); transition: width 0.5s ease; }
 
-  .section-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: 0.12em; margin: 28px 0 14px; color: var(--text); }
+  .section-title { font-size: 16px; font-weight: 700; letter-spacing: 0.02em; margin: 28px 0 14px; color: var(--text); }
 
   .habit-list { display: flex; flex-direction: column; gap: 12px; }
 
@@ -159,7 +157,7 @@
   .habit.done .emoji { background: var(--done-emoji-bg); }
 
   .habit-info { flex: 1; min-width: 0; }
-  .habit-name { font-size: 16px; font-weight: 600; font-family: var(--font-body); }
+  .habit-name { font-size: 16px; font-weight: 600; }
   .habit.done .habit-name { color: var(--text-soft); text-decoration: line-through; text-decoration-color: var(--muted-line); }
   .habit-streak { font-size: 12px; color: var(--text-soft); margin-top: 4px; letter-spacing: 0.03em; }
 
@@ -181,7 +179,7 @@
     color: var(--muted-line); font-size: 20px; line-height: 1;
     cursor: pointer; padding: 6px; border-radius: 8px;
     opacity: 0; transition: all 0.2s ease; flex-shrink: 0;
-    font-family: var(--font-ui);
+    
   }
   .habit:hover .delete, .habit:focus-within .delete { opacity: 1; color: var(--text-soft); }
   .delete:hover { color: var(--danger); background: var(--danger-soft); }
@@ -203,14 +201,14 @@
   footer { text-align: center; color: var(--text-soft); font-size: 12px; margin-top: 32px; opacity: 0.85; letter-spacing: 0.04em; }
 
   .fab {
-    position: fixed; right: 22px; bottom: 26px;
+    position: fixed; right: 22px; bottom: 100px;
     width: 58px; height: 58px; border-radius: 50%;
     border: none; background: var(--primary); color: #fff;
     font-size: 30px; font-weight: 300; line-height: 1;
     cursor: pointer; box-shadow: 0 12px 28px var(--shadow-strong);
     transition: transform 0.15s ease, background 0.2s ease;
     z-index: 40; display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-ui);
+    
   }
   .fab:hover { transform: scale(1.08); background: var(--primary-strong); }
   .fab:active { transform: scale(0.94); }
@@ -235,13 +233,13 @@
     animation: modal-in 0.25s ease;
   }
   @keyframes modal-in { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
-  .modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 14px; }
 
   .modal-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
   .modal-tabs button {
     flex: 1; border: 1px solid var(--muted-line);
     background: transparent; color: var(--text-soft);
-    font-family: var(--font-ui); font-size: 14px;
+     font-size: 14px;
     padding: 9px 0; border-radius: 10px; cursor: pointer;
     transition: all 0.15s ease;
   }
@@ -254,7 +252,7 @@
     background: var(--card);
     border-radius: 14px; padding: 12px 6px 10px;
     cursor: pointer; transition: all 0.15s ease;
-    font-family: var(--font-ui); color: var(--text);
+     color: var(--text);
   }
   .template-item:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 6px 16px var(--shadow); }
   .template-item .t-emoji { font-size: 24px; }
@@ -268,12 +266,12 @@
     border-radius: 12px; padding: 11px 13px;
     font-size: 15px; outline: none;
     transition: border-color 0.2s;
-    font-family: var(--font-body);
+    
   }
   .custom-form input:focus { border-color: var(--primary); }
   .custom-form input::placeholder { color: var(--text-soft); opacity: 0.7; }
 
-  .emoji-label { font-size: 13px; color: var(--text-soft); font-family: var(--font-ui); }
+  .emoji-label { font-size: 13px; color: var(--text-soft);  }
   .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
   .emoji-option {
     aspect-ratio: 1; border-radius: 12px;
@@ -291,7 +289,7 @@
     flex: 1; border: none; border-radius: 12px;
     padding: 12px 0; font-size: 15px; font-weight: 600;
     cursor: pointer; transition: all 0.15s ease;
-    font-family: var(--font-ui);
+    
   }
   .btn-cancel { background: var(--card); color: var(--text-soft); border: 1px solid var(--muted-line) !important; }
   .btn-cancel:hover { color: var(--text); }
@@ -299,12 +297,94 @@
   .btn-add:hover { background: var(--primary-strong); transform: translateY(-1px); }
   .btn-add:active { transform: scale(0.97); }
 
+
+  /* ===== 底部导航 ===== */
+  .fab-hidden .fab { display: none; }
+  .tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: space-around;
+    background: var(--card);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--muted-line);
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+    z-index: 45;
+  }
+  .tabbar button {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    border: none; background: transparent; color: var(--text-soft);
+    font-size: 11px; cursor: pointer; padding: 4px 0 6px;
+    transition: color 0.2s ease;
+  }
+  .tabbar button .tab-icon { font-size: 20px; line-height: 1; }
+  .tabbar button.active { color: var(--primary); }
+
+  /* ===== 统计 ===== */
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 6px; }
+  .stat-card {
+    background: var(--card);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--muted-line);
+    border-radius: 18px;
+    padding: 18px 16px;
+    text-align: center;
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+  .stat-num { font-size: 26px; font-weight: 800; color: var(--text); }
+  .stat-label { font-size: 12px; color: var(--text-soft); margin-top: 4px; }
+
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    background: var(--card);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--muted-line);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+  .heat-cell { aspect-ratio: 1; border-radius: 8px; background: var(--bar-track); }
+  .heat-cell.placeholder { background: transparent; }
+  .heat-cell.future { background: transparent; }
+  .heat-cell.empty-day { background: var(--bar-track); }
+  .heat-cell.lv1 { background: rgba(74,111,165,0.25); }
+  .heat-cell.lv2 { background: rgba(74,111,165,0.45); }
+  .heat-cell.lv3 { background: rgba(74,111,165,0.7); }
+  .heat-cell.lv4 { background: rgba(74,111,165,0.95); }
+
+  /* ===== 我的 ===== */
+  .mine-card {
+    background: var(--card);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--muted-line);
+    border-radius: 18px;
+    padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+  .mine-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 4px 2px; }
+  .mine-value { color: var(--primary); font-weight: 600; }
+  .mine-btn {
+    width: 100%; border: 1px solid var(--muted-line);
+    background: var(--card); color: var(--text);
+    border-radius: 12px; padding: 12px 0;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .mine-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .mine-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+  .mine-about { font-size: 12px; color: var(--text-soft); line-height: 1.6; padding: 2px; }
+
   .toast {
     position: fixed; left: 50%; bottom: 100px;
     transform: translateX(-50%) translateY(20px);
     background: rgba(20, 30, 50, 0.9); color: #fff;
     padding: 10px 18px; border-radius: 999px;
-    font-size: 14px; font-family: var(--font-ui);
+    font-size: 14px; 
     opacity: 0; pointer-events: none;
     transition: all 0.25s ease; z-index: 70;
   }
@@ -315,6 +395,7 @@
   <div class="sky-glow"></div>
 
   <div class="app">
+    <section id="pageToday">
     <header class="topbar">
       <div>
         <h1>The day you insist</h1>
@@ -341,7 +422,38 @@
     <div class="habit-list" id="habitList"></div>
 
     <footer>数据保存在本浏览器中 · 每天自动重新开始 · 天气自动获取</footer>
+    </section>
+
+    <section id="pageStats" hidden>
+      <div class="section-title">统计</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="statTodayRate">0%</div><div class="stat-label">今日完成率</div></div>
+        <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">累计打卡</div></div>
+        <div class="stat-card"><div class="stat-num" id="statStreak">0</div><div class="stat-label">当前连续</div></div>
+        <div class="stat-card"><div class="stat-num" id="statBest">0</div><div class="stat-label">最长连续</div></div>
+      </div>
+      <div class="section-title">本月热力图</div>
+      <div class="heatmap" id="heatmap"></div>
+    </section>
+
+    <section id="pageMine" hidden>
+      <div class="section-title">我的</div>
+      <div class="mine-card">
+        <div class="mine-row"><span>当前天气</span><span class="mine-value" id="mineWeather">-</span></div>
+        <button class="mine-btn" id="exportBtn">导出数据（JSON 备份）</button>
+        <button class="mine-btn" id="importBtn">导入备份</button>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+        <button class="mine-btn danger" id="clearBtn">清空所有数据</button>
+        <p class="mine-about">数据保存在本浏览器 localStorage。天气来自 wttr.in，未联网时按时间段显示。</p>
+      </div>
+    </section>
   </div>
+
+  <nav class="tabbar" id="tabbar">
+    <button type="button" class="active" data-page="today"><span class="tab-icon">📋</span><span>今日</span></button>
+    <button type="button" data-page="stats"><span class="tab-icon">📊</span><span>统计</span></button>
+    <button type="button" data-page="mine"><span class="tab-icon">👤</span><span>我的</span></button>
+  </nav>
 
   <button class="fab" id="addFab" title="添加习惯" aria-label="添加习惯">＋</button>
 
@@ -465,6 +577,7 @@
     document.getElementById("weatherText").textContent =
       meta.label + (currentTemp !== null ? " " + currentTemp + "°" : "");
     syncWeatherMenuActive();
+    if (pages && !pages.mine.hidden) updateMineWeather();
   }
 
   function refreshWeather() {
@@ -782,6 +895,152 @@
 
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden) { render(); refreshWeather(); }
+  });
+
+
+  /* ================= 底部导航 ================= */
+  var pages = {
+    today: document.getElementById("pageToday"),
+    stats: document.getElementById("pageStats"),
+    mine: document.getElementById("pageMine")
+  };
+  var tabButtons = document.querySelectorAll("#tabbar button");
+
+  function showPage(name) {
+    Object.keys(pages).forEach(function (k) { pages[k].hidden = k !== name; });
+    tabButtons.forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-page") === name); });
+    document.body.classList.toggle("fab-hidden", name !== "today");
+    if (name === "stats") renderStats();
+    if (name === "mine") updateMineWeather();
+  }
+  tabButtons.forEach(function (b) {
+    b.addEventListener("click", function () { showPage(b.getAttribute("data-page")); });
+  });
+
+  /* ================= 统计 ================= */
+  function countCompletions(key) {
+    var list = state.completions[key] || [];
+    return list.length;
+  }
+
+  function computeStreaks() {
+    var current = 0;
+    var d = new Date();
+    if (countCompletions(todayKey()) === 0) d.setDate(d.getDate() - 1);
+    while (countCompletions(dateKey(d)) > 0) { current++; d.setDate(d.getDate() - 1); }
+
+    var dates = Object.keys(state.completions).filter(function (k) {
+      return state.completions[k].length > 0;
+    }).sort();
+    var best = 0, run = 0, prev = null;
+    dates.forEach(function (k) {
+      if (prev !== null) {
+        var diff = Math.round((new Date(k) - new Date(prev)) / 86400000);
+        run = (diff === 1) ? run + 1 : 1;
+      } else { run = 1; }
+      prev = k;
+      if (run > best) best = run;
+    });
+    return { current: current, best: best };
+  }
+
+  function renderStats() {
+    var total = state.habits.length;
+    var todayDone = countCompletions(todayKey());
+    document.getElementById("statTodayRate").textContent =
+      total === 0 ? "0%" : Math.round((todayDone / total) * 100) + "%";
+
+    var totalCount = 0;
+    Object.keys(state.completions).forEach(function (k) { totalCount += state.completions[k].length; });
+    document.getElementById("statTotal").textContent = totalCount;
+
+    var s = computeStreaks();
+    document.getElementById("statStreak").textContent = s.current;
+    document.getElementById("statBest").textContent = s.best;
+
+    var heat = document.getElementById("heatmap");
+    heat.innerHTML = "";
+    var now = new Date();
+    var y = now.getFullYear(), m = now.getMonth();
+    var first = new Date(y, m, 1);
+    var daysInMonth = new Date(y, m + 1, 0).getDate();
+    var offset = first.getDay();
+    for (var i = 0; i < offset; i++) {
+      var ph = document.createElement("div");
+      ph.className = "heat-cell placeholder";
+      heat.appendChild(ph);
+    }
+    for (var day = 1; day <= daysInMonth; day++) {
+      var cell = document.createElement("div");
+      cell.className = "heat-cell";
+      var key = y + "-" + String(m + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+      var dd = new Date(y, m, day);
+      if (dd > now) {
+        cell.classList.add("future");
+      } else if (total === 0) {
+        cell.classList.add("empty-day");
+      } else {
+        var done = countCompletions(key);
+        var ratio = Math.min(1, done / total);
+        cell.classList.add("lv" + Math.round(ratio * 4));
+        cell.title = key + " 完成 " + done + "/" + total;
+      }
+      heat.appendChild(cell);
+    }
+  }
+
+  /* ================= 我的 ================= */
+  function updateMineWeather() {
+    var meta = getConditionMeta(currentCondition || "sunny");
+    document.getElementById("mineWeather").textContent =
+      meta.icon + " " + meta.label + (currentTemp !== null ? " " + currentTemp + "°" : "");
+  }
+
+  function exportData() {
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "habit-backup-" + todayKey() + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    showToast("已导出备份");
+  }
+
+  function importData(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var parsed = JSON.parse(reader.result);
+        if (!parsed || !Array.isArray(parsed.habits) || !parsed.completions) throw new Error("格式不对");
+        state = parsed;
+        save();
+        render();
+        renderStats();
+        showToast("导入成功");
+      } catch (e) {
+        showToast("导入失败：文件格式不正确");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  document.getElementById("exportBtn").addEventListener("click", exportData);
+  document.getElementById("importBtn").addEventListener("click", function () {
+    document.getElementById("importFile").click();
+  });
+  document.getElementById("importFile").addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) importData(e.target.files[0]);
+    e.target.value = "";
+  });
+  document.getElementById("clearBtn").addEventListener("click", function () {
+    if (window.confirm("确定清空所有习惯和打卡记录吗？此操作不可恢复。")) {
+      state = { habits: [], completions: {} };
+      save();
+      render();
+      showToast("已清空");
+    }
   });
 
   /* ================= 启动 ================= */
