@@ -77,40 +77,6 @@
   h1 { font-weight: 800; font-size: 28px; letter-spacing: 0.5px; line-height: 1.25; }
   .date { color: var(--text-soft); font-size: 14px; margin-top: 8px; letter-spacing: 0.04em; transition: color 0.5s; }
 
-  .weather-chip-wrap { position: relative; flex-shrink: 0; }
-  .weather-chip {
-    display: flex; align-items: center; gap: 6px;
-    border: 1px solid var(--muted-line);
-    background: var(--card);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    color: var(--text);
-    border-radius: 999px;
-    padding: 8px 14px;
-    font-size: 13px;
-    
-    cursor: pointer;
-    box-shadow: 0 4px 14px var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .weather-chip:hover { transform: translateY(-1px); box-shadow: 0 8px 20px var(--shadow-strong); }
-  .weather-menu {
-    position: absolute; top: calc(100% + 8px); right: 0; width: 172px;
-    background: var(--card-solid);
-    border-radius: 16px;
-    box-shadow: 0 18px 50px var(--shadow-strong);
-    padding: 8px; z-index: 60; display: none;
-  }
-  .weather-menu.open { display: block; }
-  .weather-menu button {
-    width: 100%; display: flex; align-items: center; gap: 10px;
-    border: none; background: transparent; color: var(--text);
-     font-size: 14px;
-    padding: 9px 12px; border-radius: 10px; cursor: pointer; text-align: left;
-  }
-  .weather-menu button:hover { background: var(--primary-soft); }
-  .weather-menu button.active { color: var(--primary); font-weight: 700; }
-
   .progress-card {
     background: var(--card);
     -webkit-backdrop-filter: blur(16px);
@@ -301,23 +267,27 @@
   /* ===== 底部导航 ===== */
   .fab-hidden .fab { display: none; }
   .tabbar {
-    position: fixed; left: 0; right: 0; bottom: 0;
-    display: flex; align-items: center; justify-content: space-around;
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 6px;
     background: var(--card);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid var(--muted-line);
-    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border: 1px solid var(--muted-line);
+    border-radius: 999px;
+    padding: 6px;
+    box-shadow: 0 10px 30px var(--shadow-strong);
     z-index: 45;
   }
   .tabbar button {
-    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    width: 46px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
     border: none; background: transparent; color: var(--text-soft);
-    font-size: 11px; cursor: pointer; padding: 4px 0 6px;
-    transition: color 0.2s ease;
+    border-radius: 999px; cursor: pointer;
+    transition: all 0.2s ease;
   }
-  .tabbar button .tab-icon { font-size: 20px; line-height: 1; }
-  .tabbar button.active { color: var(--primary); }
+  .tabbar button svg { width: 22px; height: 22px; }
+  .tabbar button:hover { color: var(--text); }
+  .tabbar button.active { background: var(--primary); color: #fff; }
 
   /* ===== 统计 ===== */
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 6px; }
@@ -366,8 +336,6 @@
     display: flex; flex-direction: column; gap: 10px;
     box-shadow: 0 4px 16px var(--shadow);
   }
-  .mine-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 4px 2px; }
-  .mine-value { color: var(--primary); font-weight: 600; }
   .mine-btn {
     width: 100%; border: 1px solid var(--muted-line);
     background: var(--card); color: var(--text);
@@ -401,12 +369,6 @@
         <h1>The day you insist</h1>
         <div class="date" id="dateText"></div>
       </div>
-      <div class="weather-chip-wrap">
-        <button class="weather-chip" id="weatherChip" aria-label="选择天气">
-          <span id="weatherIcon">☀️</span><span id="weatherText">晴</span>
-        </button>
-        <div class="weather-menu" id="weatherMenu"></div>
-      </div>
     </header>
 
     <div class="progress-card">
@@ -439,7 +401,6 @@
     <section id="pageMine" hidden>
       <div class="section-title">我的</div>
       <div class="mine-card">
-        <div class="mine-row"><span>当前天气</span><span class="mine-value" id="mineWeather">-</span></div>
         <button class="mine-btn" id="exportBtn">导出数据（JSON 备份）</button>
         <button class="mine-btn" id="importBtn">导入备份</button>
         <input type="file" id="importFile" accept=".json,application/json" hidden>
@@ -450,9 +411,15 @@
   </div>
 
   <nav class="tabbar" id="tabbar">
-    <button type="button" class="active" data-page="today"><span class="tab-icon">📋</span><span>今日</span></button>
-    <button type="button" data-page="stats"><span class="tab-icon">📊</span><span>统计</span></button>
-    <button type="button" data-page="mine"><span class="tab-icon">👤</span><span>我的</span></button>
+    <button type="button" class="active" data-page="today" aria-label="今日" title="今日">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </button>
+    <button type="button" data-page="stats" aria-label="统计" title="统计">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    </button>
+    <button type="button" data-page="mine" aria-label="我的" title="我的">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
   </nav>
 
   <button class="fab" id="addFab" title="添加习惯" aria-label="添加习惯">＋</button>
@@ -494,29 +461,8 @@
   "use strict";
 
   var STORAGE_KEY = "habit-tracker-v1";
-  var WEATHER_KEY = "habit-tracker-weather";
 
-  var CONDITIONS = [
-    { id: "auto",     label: "自动",   icon: "🔄" },
-    { id: "sunny",    label: "晴",     icon: "☀️" },
-    { id: "partly",   label: "多云",   icon: "⛅" },
-    { id: "overcast", label: "阴",     icon: "☁️" },
-    { id: "rain",     label: "雨",     icon: "🌧️" },
-    { id: "snow",     label: "雪",     icon: "❄️" },
-    { id: "thunder",  label: "雷雨",   icon: "⛈️" },
-    { id: "fog",      label: "雾",     icon: "🌫️" },
-    { id: "night",    label: "夜晚",   icon: "🌙" }
-  ];
-  var currentCondition = null;
-  var currentTemp = null;
-
-  function getConditionMeta(id) {
-    for (var i = 0; i < CONDITIONS.length; i++) {
-      if (CONDITIONS[i].id === id) return CONDITIONS[i];
-    }
-    return CONDITIONS[1];
-  }
-
+  /* ================= 天气（静默作用于背景） ================= */
   function timeFallback() {
     var h = new Date().getHours();
     if (h >= 21 || h < 5) return "night";
@@ -536,99 +482,64 @@
     return (h >= 19 || h < 6) ? "night" : "partly";
   }
 
-  function fetchWeather() {
+  function getPosition() {
+    return new Promise(function (resolve) {
+      if (!navigator.geolocation) { resolve(null); return; }
+      var done = false;
+      var timer = setTimeout(function () { if (!done) { done = true; resolve(null); } }, 6000);
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+        },
+        function () {
+          if (!done) { done = true; clearTimeout(timer); resolve(null); }
+        },
+        { timeout: 5000, maximumAge: 600000 }
+      );
+    });
+  }
+
+  function fetchWeather(url) {
     return new Promise(function (resolve) {
       var done = false;
-      var timer = setTimeout(function () {
-        if (!done) { done = true; resolve(null); }
-      }, 8000);
+      var timer = setTimeout(function () { if (!done) { done = true; resolve(null); } }, 8000);
       try {
         var ctrl = new AbortController();
-        fetch("https://wttr.in/?format=j1", { signal: ctrl.signal })
-          .then(function (res) {
-            if (!res.ok) throw new Error("bad");
-            return res.json();
-          })
+        fetch(url, { signal: ctrl.signal })
+          .then(function (res) { if (!res.ok) throw new Error("bad"); return res.json(); })
           .then(function (j) {
             if (done) return;
-            done = true;
-            clearTimeout(timer);
+            done = true; clearTimeout(timer);
             var cc = (j.current_condition || [])[0] || {};
             var desc = ((cc.weatherDesc || [])[0] || {}).value || "";
-            var temp = cc.temp_C;
             var h = new Date().getHours();
-            resolve({ cond: mapWeather(desc, h), temp: temp });
+            resolve(mapWeather(desc, h));
           })
-          .catch(function () {
-            if (!done) { done = true; clearTimeout(timer); resolve(null); }
-          });
-      } catch (e) {
+          .catch(function () { if (!done) { done = true; clearTimeout(timer); resolve(null); } });
+      } catch (err) {
         if (!done) { done = true; clearTimeout(timer); resolve(null); }
       }
     });
   }
 
-  function applyCondition(cond, temp) {
-    currentCondition = cond;
-    currentTemp = (temp !== undefined && temp !== null) ? temp : null;
+  function applyCondition(cond) {
     document.body.className = "weather-" + cond;
-    var meta = getConditionMeta(cond);
-    document.getElementById("weatherIcon").textContent = meta.icon;
-    document.getElementById("weatherText").textContent =
-      meta.label + (currentTemp !== null ? " " + currentTemp + "°" : "");
-    syncWeatherMenuActive();
-    if (pages && !pages.mine.hidden) updateMineWeather();
   }
 
   function refreshWeather() {
-    var override = null;
-    try { override = localStorage.getItem(WEATHER_KEY); } catch (e) { /* ignore */ }
-    if (override && override !== "auto") {
-      applyCondition(override, null);
-      return;
-    }
-    fetchWeather().then(function (r) {
-      if (r) applyCondition(r.cond, r.temp);
-      else applyCondition(timeFallback(), null);
+    getPosition().then(function (pos) {
+      var url = pos
+        ? "https://wttr.in/" + pos.lat.toFixed(2) + "," + pos.lon.toFixed(2) + "?format=j1"
+        : "https://wttr.in/?format=j1";
+      fetchWeather(url).then(function (cond) {
+        if (cond) applyCondition(cond);
+        else applyCondition(timeFallback());
+      });
     });
   }
-
-  function syncWeatherMenuActive() {
-    var override = null;
-    try { override = localStorage.getItem(WEATHER_KEY); } catch (e) { /* ignore */ }
-    var activeId = (override && override !== "auto") ? override : "auto";
-    var btns = document.querySelectorAll("#weatherMenu button");
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].classList.toggle("active", btns[i].getAttribute("data-id") === activeId);
-    }
-  }
-
-  var weatherChip = document.getElementById("weatherChip");
-  var weatherMenu = document.getElementById("weatherMenu");
-
-  CONDITIONS.forEach(function (c) {
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.setAttribute("data-id", c.id);
-    btn.innerHTML = "<span>" + c.icon + "</span><span>" + c.label + "</span>";
-    btn.addEventListener("click", function () {
-      try { localStorage.setItem(WEATHER_KEY, c.id); } catch (e) { /* ignore */ }
-      if (c.id === "auto") refreshWeather();
-      else applyCondition(c.id, null);
-      weatherMenu.classList.remove("open");
-    });
-    weatherMenu.appendChild(btn);
-  });
-
-  weatherChip.addEventListener("click", function (e) {
-    e.stopPropagation();
-    weatherMenu.classList.toggle("open");
-  });
-  document.addEventListener("click", function (e) {
-    if (!weatherMenu.contains(e.target) && e.target !== weatherChip) {
-      weatherMenu.classList.remove("open");
-    }
-  });
 
   /* ================= 数据 ================= */
   var state = load();
@@ -911,7 +822,6 @@
     tabButtons.forEach(function (b) { b.classList.toggle("active", b.getAttribute("data-page") === name); });
     document.body.classList.toggle("fab-hidden", name !== "today");
     if (name === "stats") renderStats();
-    if (name === "mine") updateMineWeather();
   }
   tabButtons.forEach(function (b) {
     b.addEventListener("click", function () { showPage(b.getAttribute("data-page")); });
@@ -990,12 +900,6 @@
   }
 
   /* ================= 我的 ================= */
-  function updateMineWeather() {
-    var meta = getConditionMeta(currentCondition || "sunny");
-    document.getElementById("mineWeather").textContent =
-      meta.icon + " " + meta.label + (currentTemp !== null ? " " + currentTemp + "°" : "");
-  }
-
   function exportData() {
     var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     var a = document.createElement("a");
