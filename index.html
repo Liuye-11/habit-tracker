@@ -1,205 +1,178 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="warm">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The day you insist</title>
 <style>
-  :root, [data-theme="warm"] {
-    --bg1: #fff4ea;
-    --bg2: #ffe7d1;
-    --card: #ffffff;
-    --card-alt: #faf0e7;
-    --text: #4b2e1a;
-    --text-soft: #a07860;
-    --border: #f0dcc8;
-    --primary: #f97316;
-    --primary-strong: #ea580c;
-    --primary-soft: #ffedd5;
-    --chip-selected: #fff7ed;
+  :root {
+    --font-display: "Didot", "Iowan Old Style", "Baskerville", "Songti SC", "STSong", "SimSun", Georgia, serif;
+    --font-body: "Iowan Old Style", "Palatino", "Baskerville", "Songti SC", "STSong", "SimSun", Georgia, "PingFang SC", "Microsoft YaHei", serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    --primary: #2563eb;
+    --primary-strong: #1d4ed8;
+    --primary-soft: rgba(37, 99, 235, 0.12);
     --done: #10b981;
-    --done-soft: #ecfdf5;
-    --done-emoji-bg: #d1fae5;
-    --bar-track: #f4e6d8;
-    --muted-line: #e8d5c2;
-    --shadow: rgba(249, 115, 22, 0.14);
-    --shadow-strong: rgba(249, 115, 22, 0.22);
-    --overlay: rgba(64, 32, 12, 0.45);
-    --danger-soft: #fff1f2;
+    --done-soft: rgba(16, 185, 129, 0.14);
+    --done-emoji-bg: rgba(16, 185, 129, 0.18);
+    --danger: #f43f5e;
+    --danger-soft: rgba(244, 63, 94, 0.12);
+    --bar-track: rgba(148, 163, 184, 0.25);
   }
 
-  [data-theme="dark"] {
-    --bg1: #12141f;
-    --bg2: #1b1526;
-    --card: #1e2133;
-    --card-alt: #262a40;
-    --text: #f1f3f7;
-    --text-soft: #9298b0;
-    --border: #2c3047;
-    --primary: #fb923c;
-    --primary-strong: #f97316;
-    --primary-soft: #3b2a1a;
-    --chip-selected: #45301c;
-    --done: #34d399;
-    --done-soft: #0f2f26;
-    --done-emoji-bg: #12332a;
-    --bar-track: #2c3047;
-    --muted-line: #3a3f5c;
-    --shadow: rgba(0, 0, 0, 0.35);
-    --shadow-strong: rgba(0, 0, 0, 0.55);
-    --overlay: rgba(0, 0, 0, 0.6);
-    --danger-soft: #3a2026;
+  body.weather-sunny   { --text: #16233c; --text-soft: #3f5d85; --card: rgba(255,255,255,0.78); --card-solid: #ffffff; --shadow: rgba(15,40,80,0.14); --shadow-strong: rgba(15,40,80,0.22); --muted-line: rgba(120,150,190,0.45); }
+  body.weather-partly  { --text: #16233c; --text-soft: #44607f; --card: rgba(255,255,255,0.78); --card-solid: #ffffff; --shadow: rgba(15,40,80,0.14); --shadow-strong: rgba(15,40,80,0.22); --muted-line: rgba(120,150,190,0.45); }
+  body.weather-overcast{ --text: #1f2937; --text-soft: #55637a; --card: rgba(255,255,255,0.80); --card-solid: #ffffff; --shadow: rgba(40,50,70,0.14); --shadow-strong: rgba(40,50,70,0.22); --muted-line: rgba(110,125,150,0.45); }
+  body.weather-snow    { --text: #263a54; --text-soft: #5b7290; --card: rgba(255,255,255,0.82); --card-solid: #ffffff; --shadow: rgba(50,80,120,0.14); --shadow-strong: rgba(50,80,120,0.22); --muted-line: rgba(130,155,185,0.5); }
+  body.weather-fog     { --text: #27313d; --text-soft: #5d6b7d; --card: rgba(255,255,255,0.80); --card-solid: #ffffff; --shadow: rgba(40,55,75,0.14); --shadow-strong: rgba(40,55,75,0.22); --muted-line: rgba(110,125,145,0.45); }
+
+  body.weather-rain    { --text: #eef4fb; --text-soft: #b8cbe0; --card: rgba(13,27,48,0.62); --card-solid: #0e1e38; --shadow: rgba(0,0,0,0.30); --shadow-strong: rgba(0,0,0,0.45); --muted-line: rgba(160,185,215,0.4); }
+  body.weather-thunder { --text: #f1f5fb; --text-soft: #aab8d0; --card: rgba(12,16,32,0.66); --card-solid: #11162b; --shadow: rgba(0,0,0,0.35); --shadow-strong: rgba(0,0,0,0.5); --muted-line: rgba(150,170,205,0.4); }
+  body.weather-night   { --text: #eaf1fb; --text-soft: #9fb3d0; --card: rgba(10,20,45,0.66); --card-solid: #0d1830; --shadow: rgba(0,0,0,0.35); --shadow-strong: rgba(0,0,0,0.5); --muted-line: rgba(150,175,215,0.4); }
+
+  body {
+    min-height: 100vh;
+    color: var(--text);
+    background-attachment: fixed;
+    transition: background 1.2s ease, color 0.6s ease;
+    -webkit-font-smoothing: antialiased;
   }
+  body.weather-sunny   { background: linear-gradient(180deg, #2f8ff0 0%, #6fc0f5 52%, #cde9ff 100%); }
+  body.weather-partly  { background: linear-gradient(180deg, #5f9fd8 0%, #9cc6ec 55%, #e4f0fa 100%); }
+  body.weather-overcast{ background: linear-gradient(180deg, #7d8ba0 0%, #a9b6c6 55%, #dde3ea 100%); }
+  body.weather-rain    { background: linear-gradient(180deg, #44618a 0%, #6d88ab 55%, #9db4cc 100%); }
+  body.weather-snow    { background: linear-gradient(180deg, #a9c2dd 0%, #d5e3f0 60%, #f6fafd 100%); }
+  body.weather-thunder { background: linear-gradient(180deg, #232c47 0%, #3b4a6d 55%, #64779c 100%); }
+  body.weather-fog     { background: linear-gradient(180deg, #9aa7b5 0%, #c3cdd8 55%, #eef1f5 100%); }
+  body.weather-night   { background: linear-gradient(180deg, #070f24 0%, #13264a 60%, #27486f 100%); }
+
+  .sky-glow {
+    position: fixed;
+    top: -120px;
+    right: -80px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.85;
+    transition: background 1.2s ease;
+  }
+  body.weather-sunny .sky-glow    { background: radial-gradient(circle, rgba(255,214,102,0.85) 0%, rgba(255,214,102,0) 65%); }
+  body.weather-partly .sky-glow   { background: radial-gradient(circle, rgba(255,225,140,0.55) 0%, rgba(255,225,140,0) 65%); }
+  body.weather-night .sky-glow    { background: radial-gradient(circle, rgba(235,240,255,0.55) 0%, rgba(235,240,255,0) 65%); }
+  body.weather-thunder .sky-glow  { background: radial-gradient(circle, rgba(180,200,255,0.25) 0%, rgba(180,200,255,0) 65%); }
+  body.weather-snow .sky-glow     { background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 65%); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html, body {
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
-      "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  body {
-    background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 100%);
-    background-attachment: fixed;
-    transition: background 0.35s ease;
-  }
-
   .app {
+    position: relative;
+    z-index: 1;
     max-width: 600px;
     margin: 0 auto;
     padding: 40px 20px 110px;
+    font-family: var(--font-body);
   }
 
-  /* ---------- 顶栏 ---------- */
-  .topbar {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  h1 {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: 0.4px;
-    line-height: 1.25;
-  }
-  .date { color: var(--text-soft); font-size: 14px; margin-top: 6px; transition: color 0.3s; }
+  .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 26px; }
+  h1 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 27px; letter-spacing: 0.03em; line-height: 1.2; }
+  .date { color: var(--text-soft); font-size: 14px; margin-top: 8px; letter-spacing: 0.04em; transition: color 0.5s; }
 
-  .icon-btn {
-    width: 46px;
-    height: 46px;
-    flex-shrink: 0;
-    border-radius: 14px;
-    border: 2px solid var(--border);
+  .weather-chip-wrap { position: relative; flex-shrink: 0; }
+  .weather-chip {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--muted-line);
     background: var(--card);
-    font-size: 20px;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-family: var(--font-ui);
     cursor: pointer;
     box-shadow: 0 4px 14px var(--shadow);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .icon-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--shadow-strong); }
+  .weather-chip:hover { transform: translateY(-1px); box-shadow: 0 8px 20px var(--shadow-strong); }
+  .weather-menu {
+    position: absolute; top: calc(100% + 8px); right: 0; width: 172px;
+    background: var(--card-solid);
+    border-radius: 16px;
+    box-shadow: 0 18px 50px var(--shadow-strong);
+    padding: 8px; z-index: 60; display: none;
+  }
+  .weather-menu.open { display: block; }
+  .weather-menu button {
+    width: 100%; display: flex; align-items: center; gap: 10px;
+    border: none; background: transparent; color: var(--text);
+    font-family: var(--font-ui); font-size: 14px;
+    padding: 9px 12px; border-radius: 10px; cursor: pointer; text-align: left;
+  }
+  .weather-menu button:hover { background: var(--primary-soft); }
+  .weather-menu button.active { color: var(--primary); font-weight: 700; }
 
-  /* ---------- 进度卡 ---------- */
   .progress-card {
     background: var(--card);
-    border-radius: 20px;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--muted-line);
+    border-radius: 22px;
     padding: 22px 24px;
     box-shadow: 0 8px 30px var(--shadow);
     margin-bottom: 24px;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+    transition: background 0.6s ease, box-shadow 0.6s ease;
   }
-  .progress-top {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .progress-label { font-size: 15px; color: var(--text-soft); transition: color 0.3s; }
-  .progress-count { font-size: 28px; font-weight: 800; color: var(--primary); }
-  .progress-count small { font-size: 16px; font-weight: 600; color: var(--text-soft); }
-  .progress-celebration { font-size: 15px; color: var(--done); font-weight: 700; }
+  .progress-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+  .progress-label { font-size: 15px; color: var(--text-soft); letter-spacing: 0.06em; }
+  .progress-count { font-size: 30px; font-weight: 700; font-family: var(--font-display); color: var(--text); }
+  .progress-count small { font-size: 15px; font-weight: 400; color: var(--text-soft); }
+  .progress-celebration { font-size: 15px; color: var(--done); font-weight: 600; min-height: 20px; margin-top: 10px; }
 
-  .bar { height: 10px; background: var(--bar-track); border-radius: 99px; overflow: hidden; transition: background 0.3s; }
-  .bar-fill {
-    height: 100%;
-    width: 0%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, var(--primary), var(--primary-strong));
-    transition: width 0.5s ease;
-  }
+  .bar { height: 8px; background: var(--bar-track); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), #60a5fa); transition: width 0.5s ease; }
 
-  .section-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin: 28px 0 12px;
-  }
+  .section-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: 0.12em; margin: 28px 0 14px; color: var(--text); }
 
-  /* ---------- 习惯列表 ---------- */
   .habit-list { display: flex; flex-direction: column; gap: 12px; }
 
   .habit {
     background: var(--card);
-    border-radius: 16px;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--muted-line);
+    border-radius: 18px;
     padding: 14px 16px;
     display: flex;
     align-items: center;
     gap: 14px;
     box-shadow: 0 4px 16px var(--shadow);
-    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.3s ease;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.4s ease;
     animation: pop-in 0.25s ease;
   }
-  @keyframes pop-in {
-    from { opacity: 0; transform: translateY(6px) scale(0.98); }
-    to   { opacity: 1; transform: none; }
-  }
+  @keyframes pop-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
   .habit:hover { transform: translateY(-1px); box-shadow: 0 8px 22px var(--shadow-strong); }
-
   .habit.done { background: linear-gradient(135deg, var(--done-soft), var(--card)); }
 
-  .emoji {
-    width: 44px; height: 44px;
-    border-radius: 12px;
-    background: var(--primary-soft);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-    transition: background 0.3s;
-  }
+  .emoji { width: 46px; height: 46px; border-radius: 14px; background: var(--primary-soft); display: flex; align-items: center; justify-content: center; font-size: 23px; flex-shrink: 0; }
   .habit.done .emoji { background: var(--done-emoji-bg); }
 
   .habit-info { flex: 1; min-width: 0; }
-  .habit-name { font-size: 16px; font-weight: 600; transition: color 0.2s; }
-  .habit.done .habit-name { color: var(--text-soft); text-decoration: line-through; }
-  .habit-streak { font-size: 12px; color: var(--text-soft); margin-top: 3px; }
+  .habit-name { font-size: 16px; font-weight: 600; font-family: var(--font-body); }
+  .habit.done .habit-name { color: var(--text-soft); text-decoration: line-through; text-decoration-color: var(--muted-line); }
+  .habit-streak { font-size: 12px; color: var(--text-soft); margin-top: 4px; letter-spacing: 0.03em; }
 
   .check {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: 2.5px solid var(--muted-line);
-    cursor: pointer;
-    flex-shrink: 0;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid var(--muted-line);
+    cursor: pointer; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s ease;
-    background: transparent;
-    padding: 0;
+    transition: all 0.2s ease; background: transparent; padding: 0;
   }
   .check:hover { border-color: var(--primary); transform: scale(1.08); }
-  .habit.done .check {
-    background: var(--done);
-    border-color: var(--done);
-    animation: check-pop 0.3s ease;
-  }
-  @keyframes check-pop {
-    0% { transform: scale(0.7); }
-    60% { transform: scale(1.15); }
-    100% { transform: scale(1); }
-  }
+  .habit.done .check { background: var(--done); border-color: var(--done); animation: check-pop 0.3s ease; }
+  @keyframes check-pop { 0% { transform: scale(0.7); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
   .check svg { width: 16px; height: 16px; opacity: 0; transform: scale(0.5); transition: all 0.2s ease; }
   .habit.done .check svg { opacity: 1; transform: scale(1); }
 
@@ -208,145 +181,151 @@
     color: var(--muted-line); font-size: 20px; line-height: 1;
     cursor: pointer; padding: 6px; border-radius: 8px;
     opacity: 0; transition: all 0.2s ease; flex-shrink: 0;
+    font-family: var(--font-ui);
   }
   .habit:hover .delete, .habit:focus-within .delete { opacity: 1; color: var(--text-soft); }
   .delete:hover { color: var(--danger); background: var(--danger-soft); }
-  @media (hover: none) { .delete { opacity: 0.45; } }
+  @media (hover: none) { .delete { opacity: 0.4; } }
 
   .empty {
     background: var(--card);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     border: 2px dashed var(--muted-line);
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 36px 20px;
     text-align: center;
     color: var(--text-soft);
     font-size: 15px;
   }
-  .empty .big { font-size: 42px; margin-bottom: 10px; }
+  .empty .big { font-size: 44px; margin-bottom: 10px; }
 
-  footer {
-    text-align: center;
-    color: var(--text-soft);
-    font-size: 12px;
-    margin-top: 32px;
-    opacity: 0.8;
-  }
+  footer { text-align: center; color: var(--text-soft); font-size: 12px; margin-top: 32px; opacity: 0.85; letter-spacing: 0.04em; }
 
-  /* ---------- 悬浮添加按钮 ---------- */
   .fab {
-    position: fixed;
-    right: 22px;
-    bottom: 26px;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    border: none;
-    background: var(--primary);
-    color: #fff;
-    font-size: 32px;
-    font-weight: 300;
-    line-height: 1;
-    cursor: pointer;
-    box-shadow: 0 10px 26px var(--shadow-strong);
+    position: fixed; right: 22px; bottom: 26px;
+    width: 58px; height: 58px; border-radius: 50%;
+    border: none; background: var(--primary); color: #fff;
+    font-size: 30px; font-weight: 300; line-height: 1;
+    cursor: pointer; box-shadow: 0 12px 28px var(--shadow-strong);
     transition: transform 0.15s ease, background 0.2s ease;
-    z-index: 40;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    z-index: 40; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-ui);
   }
   .fab:hover { transform: scale(1.08); background: var(--primary-strong); }
   .fab:active { transform: scale(0.94); }
 
-  /* ---------- 添加弹窗 ---------- */
   .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: var(--overlay);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    padding: 20px;
+    position: fixed; inset: 0;
+    background: rgba(10, 20, 40, 0.45);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 50; padding: 20px;
     animation: fade-in 0.2s ease;
   }
   .modal-backdrop[hidden] { display: none; }
   @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
   .modal {
-    width: 100%;
-    max-width: 380px;
-    background: var(--card);
-    border-radius: 20px;
-    padding: 22px;
-    box-shadow: 0 20px 60px var(--shadow-strong);
+    width: 100%; max-width: 400px; max-height: 82vh; overflow-y: auto;
+    background: var(--card-solid);
+    border-radius: 22px; padding: 22px;
+    box-shadow: 0 24px 70px var(--shadow-strong);
     animation: modal-in 0.25s ease;
   }
-  @keyframes modal-in {
-    from { opacity: 0; transform: translateY(14px) scale(0.97); }
-    to   { opacity: 1; transform: none; }
-  }
-  .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 14px; }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+  .modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 14px; }
 
-  .emoji-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-  .emoji-option {
-    width: 40px; height: 40px;
-    border-radius: 12px;
-    border: 2px solid transparent;
-    background: var(--card-alt);
-    font-size: 20px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+  .modal-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .modal-tabs button {
+    flex: 1; border: 1px solid var(--muted-line);
+    background: transparent; color: var(--text-soft);
+    font-family: var(--font-ui); font-size: 14px;
+    padding: 9px 0; border-radius: 10px; cursor: pointer;
     transition: all 0.15s ease;
-    padding: 0;
   }
-  .emoji-option:hover { transform: scale(1.1); }
-  .emoji-option.selected { border-color: var(--primary); background: var(--chip-selected); }
+  .modal-tabs button.active { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
 
-  .modal input {
-    width: 100%;
-    border: 2px solid var(--border);
+  .template-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .template-item {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    border: 1px solid var(--muted-line);
     background: var(--card);
-    color: var(--text);
-    border-radius: 12px;
-    padding: 12px 14px;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-    font-family: inherit;
-    margin-bottom: 16px;
+    border-radius: 14px; padding: 12px 6px 10px;
+    cursor: pointer; transition: all 0.15s ease;
+    font-family: var(--font-ui); color: var(--text);
   }
-  .modal input:focus { border-color: var(--primary); }
-  .modal input::placeholder { color: var(--text-soft); opacity: 0.8; }
+  .template-item:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 6px 16px var(--shadow); }
+  .template-item .t-emoji { font-size: 24px; }
+  .template-item .t-name { font-size: 12px; }
+
+  .custom-form { display: flex; flex-direction: column; gap: 14px; }
+  .custom-form input[type="text"] {
+    width: 100%;
+    border: 1.5px solid var(--muted-line);
+    background: var(--card); color: var(--text);
+    border-radius: 12px; padding: 11px 13px;
+    font-size: 15px; outline: none;
+    transition: border-color 0.2s;
+    font-family: var(--font-body);
+  }
+  .custom-form input:focus { border-color: var(--primary); }
+  .custom-form input::placeholder { color: var(--text-soft); opacity: 0.7; }
+
+  .emoji-label { font-size: 13px; color: var(--text-soft); font-family: var(--font-ui); }
+  .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
+  .emoji-option {
+    aspect-ratio: 1; border-radius: 12px;
+    border: 1.5px solid transparent;
+    background: var(--card);
+    font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.12s ease; padding: 0;
+  }
+  .emoji-option:hover { transform: scale(1.12); }
+  .emoji-option.selected { border-color: var(--primary); background: var(--primary-soft); }
 
   .modal-actions { display: flex; gap: 10px; }
   .modal-actions button {
-    flex: 1;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 0;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: inherit;
+    flex: 1; border: none; border-radius: 12px;
+    padding: 12px 0; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s ease;
+    font-family: var(--font-ui);
   }
-  .btn-cancel { background: var(--card-alt); color: var(--text-soft); }
+  .btn-cancel { background: var(--card); color: var(--text-soft); border: 1px solid var(--muted-line) !important; }
   .btn-cancel:hover { color: var(--text); }
   .btn-add { background: var(--primary); color: #fff; }
   .btn-add:hover { background: var(--primary-strong); transform: translateY(-1px); }
   .btn-add:active { transform: scale(0.97); }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 100px;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(20, 30, 50, 0.9); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 14px; font-family: var(--font-ui);
+    opacity: 0; pointer-events: none;
+    transition: all 0.25s ease; z-index: 70;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
-<body>
+<body class="weather-sunny">
+  <div class="sky-glow"></div>
+
   <div class="app">
     <header class="topbar">
       <div>
         <h1>The day you insist</h1>
         <div class="date" id="dateText"></div>
       </div>
-      <button class="icon-btn" id="themeToggle" title="切换主题" aria-label="切换主题">
-        <span id="themeIcon">🌙</span>
-      </button>
+      <div class="weather-chip-wrap">
+        <button class="weather-chip" id="weatherChip" aria-label="选择天气">
+          <span id="weatherIcon">☀️</span><span id="weatherText">晴</span>
+        </button>
+        <div class="weather-menu" id="weatherMenu"></div>
+      </div>
     </header>
 
     <div class="progress-card">
@@ -355,15 +334,13 @@
         <span class="progress-count" id="progressCount">0 / 0 <small>项</small></span>
       </div>
       <div class="bar"><div class="bar-fill" id="barFill"></div></div>
-      <div style="margin-top:10px; min-height:20px;">
-        <span class="progress-celebration" id="celebration"></span>
-      </div>
+      <div class="progress-celebration" id="celebration"></div>
     </div>
 
     <div class="section-title">今日习惯</div>
     <div class="habit-list" id="habitList"></div>
 
-    <footer>数据保存在本浏览器中 · 每天自动重新开始</footer>
+    <footer>数据保存在本浏览器中 · 每天自动重新开始 · 天气自动获取</footer>
   </div>
 
   <button class="fab" id="addFab" title="添加习惯" aria-label="添加习惯">＋</button>
@@ -371,24 +348,176 @@
   <div class="modal-backdrop" id="modalBackdrop" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal-title" id="modalTitle">添加新习惯</div>
-      <div class="emoji-row" id="emojiRow"></div>
-      <input id="habitName" type="text" placeholder="习惯名称，如：喝水" maxlength="12" autocomplete="off">
-      <div class="modal-actions">
-        <button type="button" class="btn-cancel" id="cancelBtn">取消</button>
-        <button type="button" class="btn-add" id="addBtn">添加</button>
+      <div class="modal-tabs">
+        <button type="button" class="active" data-tab="templates">常用模板</button>
+        <button type="button" data-tab="custom">自定义</button>
+      </div>
+      <div id="panelTemplates">
+        <div class="template-grid" id="templateGrid"></div>
+      </div>
+      <div id="panelCustom" hidden>
+        <div class="custom-form">
+          <input id="habitName" type="text" placeholder="习惯名称，如：晨跑" maxlength="20" autocomplete="off">
+          <div>
+            <div class="emoji-label">选择图标（40 个常用）</div>
+            <div class="emoji-grid" id="emojiGrid"></div>
+          </div>
+          <div>
+            <div class="emoji-label">或自由输入任意 emoji / 符号</div>
+            <input id="customEmoji" type="text" placeholder="例如 🔥 或 🌈" maxlength="6" autocomplete="off">
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" id="cancelBtn">取消</button>
+            <button type="button" class="btn-add" id="addBtn">添加</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="toast" id="toast"></div>
 
 <script>
 (function () {
   "use strict";
 
   var STORAGE_KEY = "habit-tracker-v1";
-  var THEME_KEY = "habit-tracker-theme";
-  var EMOJIS = ["💧", "🏃", "📚", "🥗", "😴", "🌅", "🧘", "✍️", "🎸", "🧹", "💊", "🎮"];
+  var WEATHER_KEY = "habit-tracker-weather";
 
-  /* ---------- 数据 ---------- */
+  var CONDITIONS = [
+    { id: "auto",     label: "自动",   icon: "🔄" },
+    { id: "sunny",    label: "晴",     icon: "☀️" },
+    { id: "partly",   label: "多云",   icon: "⛅" },
+    { id: "overcast", label: "阴",     icon: "☁️" },
+    { id: "rain",     label: "雨",     icon: "🌧️" },
+    { id: "snow",     label: "雪",     icon: "❄️" },
+    { id: "thunder",  label: "雷雨",   icon: "⛈️" },
+    { id: "fog",      label: "雾",     icon: "🌫️" },
+    { id: "night",    label: "夜晚",   icon: "🌙" }
+  ];
+  var currentCondition = null;
+  var currentTemp = null;
+
+  function getConditionMeta(id) {
+    for (var i = 0; i < CONDITIONS.length; i++) {
+      if (CONDITIONS[i].id === id) return CONDITIONS[i];
+    }
+    return CONDITIONS[1];
+  }
+
+  function timeFallback() {
+    var h = new Date().getHours();
+    if (h >= 21 || h < 5) return "night";
+    if (h >= 5 && h < 8) return "partly";
+    if (h >= 18 && h < 21) return "partly";
+    return "sunny";
+  }
+
+  function mapWeather(desc, h) {
+    var d = String(desc).toLowerCase();
+    if (/thunder|storm|lightning/i.test(d)) return "thunder";
+    if (/snow|blizzard|sleet/i.test(d)) return "snow";
+    if (/rain|drizzle|shower|drench/i.test(d)) return "rain";
+    if (/fog|mist|haze/i.test(d)) return "fog";
+    if (/cloud/i.test(d)) return (/partly|broken|intermittent/i.test(d)) ? "partly" : "overcast";
+    if (/clear|sunny/i.test(d)) return (h >= 19 || h < 6) ? "night" : "sunny";
+    return (h >= 19 || h < 6) ? "night" : "partly";
+  }
+
+  function fetchWeather() {
+    return new Promise(function (resolve) {
+      var done = false;
+      var timer = setTimeout(function () {
+        if (!done) { done = true; resolve(null); }
+      }, 8000);
+      try {
+        var ctrl = new AbortController();
+        fetch("https://wttr.in/?format=j1", { signal: ctrl.signal })
+          .then(function (res) {
+            if (!res.ok) throw new Error("bad");
+            return res.json();
+          })
+          .then(function (j) {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            var cc = (j.current_condition || [])[0] || {};
+            var desc = ((cc.weatherDesc || [])[0] || {}).value || "";
+            var temp = cc.temp_C;
+            var h = new Date().getHours();
+            resolve({ cond: mapWeather(desc, h), temp: temp });
+          })
+          .catch(function () {
+            if (!done) { done = true; clearTimeout(timer); resolve(null); }
+          });
+      } catch (e) {
+        if (!done) { done = true; clearTimeout(timer); resolve(null); }
+      }
+    });
+  }
+
+  function applyCondition(cond, temp) {
+    currentCondition = cond;
+    currentTemp = (temp !== undefined && temp !== null) ? temp : null;
+    document.body.className = "weather-" + cond;
+    var meta = getConditionMeta(cond);
+    document.getElementById("weatherIcon").textContent = meta.icon;
+    document.getElementById("weatherText").textContent =
+      meta.label + (currentTemp !== null ? " " + currentTemp + "°" : "");
+    syncWeatherMenuActive();
+  }
+
+  function refreshWeather() {
+    var override = null;
+    try { override = localStorage.getItem(WEATHER_KEY); } catch (e) { /* ignore */ }
+    if (override && override !== "auto") {
+      applyCondition(override, null);
+      return;
+    }
+    fetchWeather().then(function (r) {
+      if (r) applyCondition(r.cond, r.temp);
+      else applyCondition(timeFallback(), null);
+    });
+  }
+
+  function syncWeatherMenuActive() {
+    var override = null;
+    try { override = localStorage.getItem(WEATHER_KEY); } catch (e) { /* ignore */ }
+    var activeId = (override && override !== "auto") ? override : "auto";
+    var btns = document.querySelectorAll("#weatherMenu button");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle("active", btns[i].getAttribute("data-id") === activeId);
+    }
+  }
+
+  var weatherChip = document.getElementById("weatherChip");
+  var weatherMenu = document.getElementById("weatherMenu");
+
+  CONDITIONS.forEach(function (c) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("data-id", c.id);
+    btn.innerHTML = "<span>" + c.icon + "</span><span>" + c.label + "</span>";
+    btn.addEventListener("click", function () {
+      try { localStorage.setItem(WEATHER_KEY, c.id); } catch (e) { /* ignore */ }
+      if (c.id === "auto") refreshWeather();
+      else applyCondition(c.id, null);
+      weatherMenu.classList.remove("open");
+    });
+    weatherMenu.appendChild(btn);
+  });
+
+  weatherChip.addEventListener("click", function (e) {
+    e.stopPropagation();
+    weatherMenu.classList.toggle("open");
+  });
+  document.addEventListener("click", function (e) {
+    if (!weatherMenu.contains(e.target) && e.target !== weatherChip) {
+      weatherMenu.classList.remove("open");
+    }
+  });
+
+  /* ================= 数据 ================= */
   var state = load();
 
   function load() {
@@ -402,7 +531,7 @@
           data.completions = parsed.completions || {};
         }
       }
-    } catch (e) { /* localStorage 不可用时退回内存模式 */ }
+    } catch (e) { /* 退回内存模式 */ }
     return data;
   }
 
@@ -410,10 +539,7 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
   }
 
-  function todayKey() {
-    var d = new Date();
-    return dateKey(d);
-  }
+  function todayKey() { return dateKey(new Date()); }
 
   function dateKey(d) {
     var y = d.getFullYear();
@@ -430,9 +556,7 @@
   function getStreak(habitId) {
     var streak = 0;
     var d = new Date();
-    if (!isCompleted(habitId, todayKey())) {
-      d.setDate(d.getDate() - 1);
-    }
+    if (!isCompleted(habitId, todayKey())) d.setDate(d.getDate() - 1);
     while (isCompleted(habitId, dateKey(d))) {
       streak++;
       d.setDate(d.getDate() - 1);
@@ -440,37 +564,32 @@
     return streak;
   }
 
-  /* ---------- DOM ---------- */
-  var dateText = document.getElementById("dateText");
-  var progressCount = document.getElementById("progressCount");
-  var barFill = document.getElementById("barFill");
-  var celebration = document.getElementById("celebration");
-  var habitList = document.getElementById("habitList");
-  var emojiRow = document.getElementById("emojiRow");
-  var habitNameInput = document.getElementById("habitName");
-  var addBtn = document.getElementById("addBtn");
-  var cancelBtn = document.getElementById("cancelBtn");
-  var addFab = document.getElementById("addFab");
-  var modalBackdrop = document.getElementById("modalBackdrop");
-  var themeToggle = document.getElementById("themeToggle");
-  var themeIcon = document.getElementById("themeIcon");
+  /* ================= 常用模板 ================= */
+  var TEMPLATES = [
+    ["喝水", "💧"], ["运动", "🏃"], ["跑步", "🏃"], ["读书", "📚"],
+    ["早睡", "😴"], ["早起", "🌅"], ["冥想", "🧘"], ["写作", "✍️"],
+    ["背单词", "📖"], ["记账", "💰"], ["健康饮食", "🥗"], ["拉伸", "🤸"],
+    ["练琴", "🎹"], ["画画", "🎨"], ["打扫", "🧹"], ["护肤", "🧴"],
+    ["散步", "🚶"], ["骑行", "🚴"], ["学英语", "🗣️"], ["写日记", "📔"],
+    ["感恩", "🙏"], ["戒甜食", "🍬"], ["戒烟", "🚭"], ["整理收纳", "🧺"]
+  ];
 
-  /* ---------- 主题 ---------- */
-  function applyTheme(t) {
-    document.documentElement.setAttribute("data-theme", t);
-    themeIcon.textContent = t === "dark" ? "☀️" : "🌙";
-    try { localStorage.setItem(THEME_KEY, t); } catch (e) { /* ignore */ }
-  }
-  themeToggle.addEventListener("click", function () {
-    var cur = document.documentElement.getAttribute("data-theme");
-    applyTheme(cur === "dark" ? "warm" : "dark");
+  var EMOJIS = ["💧","🏃","📚","🥗","😴","🌅","🧘","✍️","🎸","🧹","💊","🎮","🚴","🏊","🖌️","📷","🎹","💼","🎓","🗣️","💰","🐷","🚭","🍬","🍺","🤸","🧴","🪥","🧺","🚶","📔","📊","🙏","😊","👶","📺","🧠","⏰","🌿","❤️"];
+
+  var templateGrid = document.getElementById("templateGrid");
+  TEMPLATES.forEach(function (t) {
+    var item = document.createElement("button");
+    item.type = "button";
+    item.className = "template-item";
+    item.innerHTML = '<span class="t-emoji">' + t[1] + '</span><span class="t-name">' + t[0] + "</span>";
+    item.addEventListener("click", function () {
+      addHabit(t[0], t[1]);
+    });
+    templateGrid.appendChild(item);
   });
-  applyTheme((function () {
-    try { return localStorage.getItem(THEME_KEY) || "warm"; } catch (e) { return "warm"; }
-  })());
 
-  /* ---------- 表情选择 ---------- */
   var selectedEmoji = EMOJIS[0];
+  var emojiGrid = document.getElementById("emojiGrid");
   EMOJIS.forEach(function (e) {
     var btn = document.createElement("button");
     btn.type = "button";
@@ -478,23 +597,47 @@
     btn.textContent = e;
     btn.addEventListener("click", function () {
       selectedEmoji = e;
-      emojiRow.querySelectorAll(".emoji-option").forEach(function (b) {
+      emojiGrid.querySelectorAll(".emoji-option").forEach(function (b) {
         b.classList.toggle("selected", b === btn);
       });
     });
-    emojiRow.appendChild(btn);
+    emojiGrid.appendChild(btn);
   });
 
-  /* ---------- 弹窗 ---------- */
+  /* ================= 弹窗 ================= */
+  var modalBackdrop = document.getElementById("modalBackdrop");
+  var panelTemplates = document.getElementById("panelTemplates");
+  var panelCustom = document.getElementById("panelCustom");
+  var habitNameInput = document.getElementById("habitName");
+  var customEmojiInput = document.getElementById("customEmoji");
+
   function openModal() {
     modalBackdrop.hidden = false;
-    habitNameInput.focus();
+    switchTab("templates");
+    habitNameInput.value = "";
+    customEmojiInput.value = "";
+    selectedEmoji = EMOJIS[0];
+    emojiGrid.querySelectorAll(".emoji-option").forEach(function (b, i) {
+      b.classList.toggle("selected", i === 0);
+    });
   }
-  function closeModal() {
-    modalBackdrop.hidden = true;
+  function closeModal() { modalBackdrop.hidden = true; }
+
+  function switchTab(name) {
+    var tabs = document.querySelectorAll(".modal-tabs button");
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle("active", tabs[i].getAttribute("data-tab") === name);
+    }
+    panelTemplates.hidden = name !== "templates";
+    panelCustom.hidden = name !== "custom";
+    if (name === "custom") habitNameInput.focus();
   }
-  addFab.addEventListener("click", openModal);
-  cancelBtn.addEventListener("click", closeModal);
+  document.querySelectorAll(".modal-tabs button").forEach(function (b) {
+    b.addEventListener("click", function () { switchTab(b.getAttribute("data-tab")); });
+  });
+
+  document.getElementById("addFab").addEventListener("click", openModal);
+  document.getElementById("cancelBtn").addEventListener("click", closeModal);
   modalBackdrop.addEventListener("click", function (e) {
     if (e.target === modalBackdrop) closeModal();
   });
@@ -502,7 +645,17 @@
     if (e.key === "Escape" && !modalBackdrop.hidden) closeModal();
   });
 
-  /* ---------- 渲染 ---------- */
+  /* ================= Toast ================= */
+  var toastEl = document.getElementById("toast");
+  var toastTimer = null;
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 1600);
+  }
+
+  /* ================= 渲染 ================= */
   function fmtDate() {
     var d = new Date();
     var week = ["日", "一", "二", "三", "四", "五", "六"][d.getDay()];
@@ -510,30 +663,29 @@
   }
 
   function render() {
-    dateText.textContent = fmtDate();
+    document.getElementById("dateText").textContent = fmtDate();
     var key = todayKey();
     var total = state.habits.length;
     var doneCount = state.habits.filter(function (h) {
       return isCompleted(h.id, key);
     }).length;
 
+    var progressCount = document.getElementById("progressCount");
     progressCount.innerHTML = doneCount + " / " + total + " <small>项</small>";
     var pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
-    barFill.style.width = pct + "%";
+    document.getElementById("barFill").style.width = pct + "%";
 
-    if (total > 0 && doneCount === total) {
-      celebration.textContent = "🎉 全部完成，太棒了！";
-    } else if (total > 0 && doneCount > 0) {
-      celebration.textContent = "继续加油 💪";
-    } else {
-      celebration.textContent = "";
-    }
+    var celebration = document.getElementById("celebration");
+    if (total > 0 && doneCount === total) celebration.textContent = "🎉 全部完成，太棒了！";
+    else if (total > 0 && doneCount > 0) celebration.textContent = "继续加油 💪";
+    else celebration.textContent = "";
 
+    var habitList = document.getElementById("habitList");
     habitList.innerHTML = "";
     if (total === 0) {
       var empty = document.createElement("div");
       empty.className = "empty";
-      empty.innerHTML = '<div class="big">🌱</div>还没有自己的习惯<br>点右下角「＋」开始添加';
+      empty.innerHTML = '<div class="big">🌱</div>还没有自己的习惯<br>点右下角「＋」选择模板或自定义添加';
       habitList.appendChild(empty);
       return;
     }
@@ -563,9 +715,7 @@
       check.title = done ? "取消打卡" : "打卡";
       check.setAttribute("aria-label", (done ? "取消" : "") + "完成 " + h.name);
       check.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"></polyline></svg>';
-      check.addEventListener("click", function () {
-        toggleHabit(h.id);
-      });
+      check.addEventListener("click", function () { toggleHabit(h.id); });
 
       var del = document.createElement("button");
       del.type = "button";
@@ -573,9 +723,7 @@
       del.title = "删除该习惯";
       del.setAttribute("aria-label", "删除 " + h.name);
       del.textContent = "×";
-      del.addEventListener("click", function () {
-        deleteHabit(h.id);
-      });
+      del.addEventListener("click", function () { deleteHabit(h.id); });
 
       info.appendChild(name);
       info.appendChild(streak);
@@ -587,16 +735,13 @@
     });
   }
 
-  /* ---------- 操作 ---------- */
+  /* ================= 操作 ================= */
   function toggleHabit(id) {
     var key = todayKey();
     var list = state.completions[key] || [];
     var idx = list.indexOf(id);
-    if (idx === -1) {
-      list.push(id);
-    } else {
-      list.splice(idx, 1);
-    }
+    if (idx === -1) list.push(id);
+    else list.splice(idx, 1);
     state.completions[key] = list;
     save();
     render();
@@ -608,34 +753,41 @@
     render();
   }
 
-  function addHabit() {
-    var name = habitNameInput.value.trim();
-    if (!name) {
-      habitNameInput.focus();
-      return;
-    }
+  function addHabit(name, emoji) {
+    name = String(name || "").trim();
+    if (!name) { habitNameInput.focus(); return; }
     state.habits.push({
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
       name: name,
-      emoji: selectedEmoji,
+      emoji: emoji || "✨",
       createdAt: Date.now()
     });
-    habitNameInput.value = "";
     save();
     closeModal();
     render();
+    showToast("已添加「" + name + "」");
   }
 
-  addBtn.addEventListener("click", addHabit);
+  document.getElementById("addBtn").addEventListener("click", function () {
+    var free = customEmojiInput.value.trim();
+    var emoji = free || selectedEmoji;
+    addHabit(habitNameInput.value, emoji);
+  });
   habitNameInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") addHabit();
+    if (e.key === "Enter") {
+      var free = customEmojiInput.value.trim();
+      addHabit(habitNameInput.value, free || selectedEmoji);
+    }
   });
 
   document.addEventListener("visibilitychange", function () {
-    if (!document.hidden) render();
+    if (!document.hidden) { render(); refreshWeather(); }
   });
 
+  /* ================= 启动 ================= */
   render();
+  refreshWeather();
+  setInterval(refreshWeather, 30 * 60 * 1000);
 })();
 </script>
 </body>
